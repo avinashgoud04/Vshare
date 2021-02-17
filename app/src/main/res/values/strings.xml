@@ -2,4 +2,6 @@
     <string name="app_name">Vshare</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_navigationDrawerOpen">Open navigation drawer</string>
+    <string name="text_navigationDrawerClose">Close navigation drawer</string>
 </resources>
