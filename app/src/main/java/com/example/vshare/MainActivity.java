@@ -1,17 +1,31 @@
 package com.example.vshare;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
+import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vshare.Fragments.HomeFragment;
@@ -21,7 +35,7 @@ import com.google.android.material.navigation.NavigationView;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static final int REQUEST_PERMISSION_ALL = 1;
     private static final int PERMISSION_REQUEST_CODE = 200;
@@ -30,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
     private PowerfulActionMode mActionMode;
+    private BroadcastReceiver mReceiver = null;
+
+    private int mChosenMenuItemId;
 
 
     @Override
@@ -57,9 +74,64 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener()
+        {
+            @Override
+            public void onDrawerClosed(View drawerView)
+            {
+                applyAwaitingDrawerAction();
+            }
+        });
+
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        mActionMode.setOnSelectionTaskListener(new PowerfulActionMode.OnSelectionTaskListener()
+        {
+            @Override
+            public void onSelectionTask(boolean started, PowerfulActionMode actionMode)
+            {
+                toolbar.setVisibility(!started ? View.VISIBLE : View.GONE);
+            }
+        });
 
 
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mChosenMenuItemId = item.getItemId();
+
+        if (mDrawerLayout != null)
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    private void applyAwaitingDrawerAction()
+    {
+        if (mChosenMenuItemId == 0) {
+        }  else if (R.id.menu_activity_home == mChosenMenuItemId) {
+            startActivity(new Intent(this, MainActivity.class));
+
+        } else if (R.id.menu_activity_share == mChosenMenuItemId) {
+
+            //code to send files
+
+            Toast.makeText(this,"Send !",Toast.LENGTH_SHORT).show();
+
+
+        } else if (R.id.menu_activity_receive == mChosenMenuItemId) {
+
+            //code to receive files
+
+            Toast.makeText(this,"Receive !",Toast.LENGTH_SHORT).show();
+
+        }
+
+        mChosenMenuItemId = 0;
+    }
+
+
 
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
@@ -118,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
 
 
 }
