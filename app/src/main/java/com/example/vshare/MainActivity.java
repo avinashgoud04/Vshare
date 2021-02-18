@@ -29,13 +29,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vshare.Fragments.HomeFragment;
+import com.example.vshare.activity.Activity;
 import com.genonbeta.android.framework.widget.PowerfulActionMode;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static final int REQUEST_PERMISSION_ALL = 1;
     private static final int PERMISSION_REQUEST_CODE = 200;
